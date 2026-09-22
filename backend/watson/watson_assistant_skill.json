@@ -1,0 +1,207 @@
+{
+  "name": "AI Financial Agent - IBM Watson Skill",
+  "description": "Conversational skill for personal financial tracking, budgeting, savings planning, and financial analytics.",
+  "language": "en",
+  "intents": [
+    {
+      "intent": "expense_inquiry",
+      "description": "Inquiries about total spending, monthly expenses, and individual outflows",
+      "examples": [
+        { "text": "How much did I spend this month?" },
+        { "text": "What are my total expenses?" },
+        { "text": "Show me my expenditures for September" },
+        { "text": "How much money has gone out of my account?" },
+        { "text": "Tell me my monthly expense total" },
+        { "text": "How much did I spend on groceries and food?" }
+      ]
+    },
+    {
+      "intent": "income_inquiry",
+      "description": "Inquiries about earnings, salary, inflows, and income streams",
+      "examples": [
+        { "text": "How much money did I earn this month?" },
+        { "text": "What is my total income?" },
+        { "text": "Show my salary and freelance credits" },
+        { "text": "What are my active income streams?" },
+        { "text": "How much money came in this cycle?" }
+      ]
+    },
+    {
+      "intent": "budget_assistance",
+      "description": "Inquiries about monthly budgets, remaining limits, and budget creation",
+      "examples": [
+        { "text": "Help me create a monthly budget" },
+        { "text": "How much budget do I have left?" },
+        { "text": "Am I exceeding my monthly spending limit?" },
+        { "text": "How much money do I have left for the rest of the month?" },
+        { "text": "What is my safe daily spending rate?" },
+        { "text": "Review my budget allocation" }
+      ]
+    },
+    {
+      "intent": "savings_planning",
+      "description": "Inquiries about savings goals, milestones, and accumulation strategies",
+      "examples": [
+        { "text": "I want to save ₹10,000" },
+        { "text": "Help me plan a savings target" },
+        { "text": "How much money have I saved so far?" },
+        { "text": "How is my Emergency Fund goal progressing?" },
+        { "text": "How can I save for a new MacBook?" },
+        { "text": "Plan savings for a vacation" }
+      ]
+    },
+    {
+      "intent": "spending_analysis",
+      "description": "Inquiries about category-wise spending distribution and top expense areas",
+      "examples": [
+        { "text": "Where am I spending the most?" },
+        { "text": "What is my highest expense category?" },
+        { "text": "Show category wise breakdown of my spend" },
+        { "text": "Analyze where my cash is leaking" },
+        { "text": "Which category consumes most of my salary?" }
+      ]
+    },
+    {
+      "intent": "financial_tips",
+      "description": "Requests for personalized tips, cost-cutting recommendations, and habits",
+      "examples": [
+        { "text": "Give me tips to reduce my expenses" },
+        { "text": "How can I cut down unnecessary costs?" },
+        { "text": "Give me financial advice to increase my savings" },
+        { "text": "How do I optimize my monthly cash flow?" },
+        { "text": "Recommend cost-saving strategies" }
+      ]
+    },
+    {
+      "intent": "general_financial_questions",
+      "description": "Fundamental questions regarding personal finance concepts, principles, and definitions",
+      "examples": [
+        { "text": "What is the 50/30/20 budgeting rule?" },
+        { "text": "Explain compound interest" },
+        { "text": "What is an emergency fund and why do I need one?" },
+        { "text": "What is a Mutual Fund SIP?" },
+        { "text": "How much emergency buffer should I keep?" },
+        { "text": "Explain the difference between needs and wants" }
+      ]
+    }
+  ],
+  "entities": [
+    {
+      "entity": "category",
+      "values": [
+        { "value": "Housing", "synonyms": ["rent", "lease", "apartment", "maintenance"] },
+        { "value": "Food & Dining", "synonyms": ["groceries", "dining", "restaurants", "swiggy", "zomato", "cafe"] },
+        { "value": "Transportation", "synonyms": ["metro", "uber", "ola", "petrol", "fuel", "cab", "commute"] },
+        { "value": "Utilities", "synonyms": ["bills", "electricity", "wifi", "broadband", "water", "gas"] },
+        { "value": "Shopping", "synonyms": ["amazon", "flipkart", "clothes", "gear", "gadgets"] },
+        { "value": "Investments", "synonyms": ["sip", "stocks", "mutual funds", "shares", "fixed deposit"] }
+      ]
+    },
+    {
+      "entity": "time_period",
+      "values": [
+        { "value": "this month", "synonyms": ["current month", "september", "this billing cycle"] },
+        { "value": "today", "synonyms": ["daily", "today's spend"] },
+        { "value": "this year", "synonyms": ["annual", "yearly", "year to date"] }
+      ]
+    }
+  ],
+  "dialog_nodes": [
+    {
+      "title": "Welcome",
+      "conditions": "welcome",
+      "output": {
+        "generic": [
+          {
+            "response_type": "text",
+            "text": "Hello! I am your AI Financial Agent powered by IBM Watson Assistant. I can track your expenses, review your monthly budget, optimize savings goals, or provide personalized financial tips. What would you like to explore today?"
+          }
+        ]
+      }
+    },
+    {
+      "title": "Expense Inquiry Handler",
+      "conditions": "#expense_inquiry",
+      "output": {
+        "generic": [
+          {
+            "response_type": "text",
+            "text": "You have spent ₹<? $total_expenses ?> this month out of your ₹<? $monthly_budget ?> allocated budget (<? $budget_consumed_percent ?>% utilized). Your remaining budget is ₹<? $budget_remaining ?>."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Income Inquiry Handler",
+      "conditions": "#income_inquiry",
+      "output": {
+        "generic": [
+          {
+            "response_type": "text",
+            "text": "Your total inflows for this month amount to ₹<? $total_income ?>. After accounting for ₹<? $total_expenses ?> in outflows, your net balance is ₹<? $current_balance ?>."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Budget Assistance Handler",
+      "conditions": "#budget_assistance",
+      "output": {
+        "generic": [
+          {
+            "response_type": "text",
+            "text": "Your monthly budget is currently capped at ₹<? $monthly_budget ?>. You have ₹<? $budget_remaining ?> remaining for this billing cycle, providing a safe spending allowance of approx ₹<? ($budget_remaining / 10) ?>/day."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Savings Planning Handler",
+      "conditions": "#savings_planning",
+      "output": {
+        "generic": [
+          {
+            "response_type": "text",
+            "text": "To achieve a milestone target like ₹10,000, save ₹2,500/week over 4 weeks or ₹333/day. You currently have ₹<? $amount_saved ?> accumulated across your active savings milestones!"
+          }
+        ]
+      }
+    },
+    {
+      "title": "Spending Analysis Handler",
+      "conditions": "#spending_analysis",
+      "output": {
+        "generic": [
+          {
+            "response_type": "text",
+            "text": "Your highest expenditure category is <? $top_category ?> at ₹<? $top_category_amount ?>. Trimming 15% from this category would liberate capital directly into your savings goals."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Financial Tips Handler",
+      "conditions": "#financial_tips",
+      "output": {
+        "generic": [
+          {
+            "response_type": "text",
+            "text": "Here are 3 core financial rules for you:\n1. Adhere to the 50-30-20 rule (50% needs, 30% wants, 20% savings).\n2. Practice the 48-hour pause before making non-essential purchases.\n3. Automate SIP investment deposits on the 2nd day of each month."
+          }
+        ]
+      }
+    },
+    {
+      "title": "General Financial Questions",
+      "conditions": "#general_financial_questions",
+      "output": {
+        "generic": [
+          {
+            "response_type": "text",
+            "text": "The 50/30/20 rule is a balanced budgeting framework: Allocate 50% of your take-home income to essential Needs (rent, bills, groceries), 30% to Discretionary Wants (outings, shopping), and 20% to Savings & Investments (SIPs, emergency reserves)."
+          }
+        ]
+      }
+    }
+  ]
+}
